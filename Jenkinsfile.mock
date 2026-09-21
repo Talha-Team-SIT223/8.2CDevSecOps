@@ -1,0 +1,52 @@
+﻿pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/2 * * * *')
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'TASK: Compile and package the application source code.'
+                echo 'TOOL: Maven (mvn clean package)'
+            }
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'TASK: Run unit tests to verify individual components, then run integration tests to confirm modules work together.'
+                echo 'TOOLS: JUnit (unit tests), Postman/Newman (integration tests)'
+            }
+        }
+        stage('Code Analysis') {
+            steps {
+                echo 'TASK: Perform static code analysis to ensure the codebase meets industry quality standards.'
+                echo 'TOOL: SonarQube'
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                echo 'TASK: Scan source code and dependencies for known security vulnerabilities.'
+                echo 'TOOL: OWASP Dependency-Check'
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                echo 'TASK: Deploy the built application to a staging server for pre-production validation.'
+                echo 'TOOL: Ansible, deploying to an AWS EC2 staging instance'
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'TASK: Run integration tests against the staging environment to confirm production-like behaviour.'
+                echo 'TOOL: Selenium'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'TASK: Deploy the validated build to the production environment.'
+                echo 'TOOL: Ansible, deploying to an AWS EC2 production instance'
+            }
+        }
+    }
+}
